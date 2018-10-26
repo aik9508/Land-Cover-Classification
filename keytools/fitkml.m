@@ -1,12 +1,6 @@
-function [latmin,latmax,lonmin,lonmax]=...
+function [m,latmin,latmax,lonmin,lonmax]=...
     fitkml(x,nr,folder,savefilename,markflag,grayflag,lats,lons)
-% filename='22991_26346.flat';
-% % nr=4720;
-% [amp,~]=readflat(filename,nr);
-% amp=10*log10(amp);
-% x=amp;
-
-% get the latitude and longitude coordinates for target region, which
+% get the latitude and longitude coordinates for target region, which 
 % should be a oblique rectangle
 fid=fopen(strcat(folder,'/lat'));
 lat=fread(fid,[nr,inf],'float','ieee-le');
@@ -31,7 +25,7 @@ if ~isequal(size(x),size(lat))
     lon=lon(1:sx1,1:sx2);
 end
 
-% number of range and azimuth points
+% number of points in range and azimuth direction
 [nr,na]=size(lat);
 latmax=max(lat(:));
 latmin=min(lat(:));
@@ -54,17 +48,22 @@ for i=1:nr
 end
 count=max(1,count);
 m=m./count;
-nodata=find((m==0));
-for i=2:length(nodata)-1
-    if m(nodata(i)-1)~=0 && m(nodata(i)+1)~=0
-        m(nodata(i))=(m(nodata(i)-1)+m(nodata(i)+1))/2;
+
+%% interpolation
+cc=bwconncomp(m==0);
+gap=zeros(nresamplat,nresamplon);
+for i = 1:length(cc.PixelIdxList)
+    if length(m(cc.PixelIdxList{i}))<=10
+        gap(cc.PixelIdxList{i})=1;
     end
 end
-if nargin>4 && markflag
+[xx,yy]=meshgrid([1:nresamplat,1:nresamplon]);
+m=fillgap(xx,yy,m,gap);
+if nargin>4 && ~isempty(markflag)
     m=round(m);
-    m=rmsmallobjects(m,10,2);
 end
-    
+
+%% plot
 mask=zeros(nresamplat,nresamplon);
 m(isinf(m))=0;
 m(isnan(m))=0;
@@ -76,19 +75,73 @@ if grayflag
     dout=(m-minm)/(maxm-minm);
     imwrite(dout,sprintf('%s.png',savefilename),'Alpha',mask);
 else
-    % Scale to Color Map
-    cmap=jet();
-    % cmap=sub(); % as defined in sub.m 
-    nmap = size(cmap,1);
-    
+    if ~isempty(markflag)
+        dout=zeros(nresamplat,nresamplon,3);
+        for k=1:length(markflag)
+            switch markflag(k)
+                case 'c'
+                    color=[0,255,255]/255;
+                case 'g'
+                    color=[0,255,128]/255;
+                case 'h'
+                    color=[0,204,0]/255;
+                case 'i'
+                    color=[0,153,0]/255;
+                case 'j'
+                    color=[0,100,0]/255;
+                case 'm'
+                    color=[139,69,19]/255;
+                case 'r'
+                    color=[255,0,0]/255;
+                case 'b'
+                    color=[30,144,255]/255;
+                case 'o'
+                    color=[255,128,0]/255;
+                case 'y'
+                    color=[255,255,0]/255;
+                otherwise
+                    color=[255,255,255]/255;
+            end
+            tmp=zeros(nresamplat,nresamplon);
+            tmp(m==k)=1;
+            sum(tmp(:))
+            dout=dout+reshape(repmat(tmp(:),[1,3]).*color,nresamplat,nresamplon,3);
+        end
+    else
+        % Scale to Color Map
+        cmap=jet();
+        % cmap=sub(); % as defined in sub.m 
+        nmap = size(cmap,1);
 
-    dout=m-minm;
-    dout=dout/(maxm-minm);
-    dout=round((nmap-1)*dout);
-    dout=dout+1;
 
-    % index into the color map, creating an NxMx3 truecolor image
-    dout=reshape(cmap(dout(:),:),nresamplat,nresamplon,3);
+        dout=m-minm;
+        dout=dout/(maxm-minm);
+        dout=round((nmap-1)*dout);
+        dout=dout+1;
+
+        % index into the color map, creating an NxMx3 truecolor image
+        dout=reshape(cmap(dout(:),:),nresamplat,nresamplon,3);
+    end
     imwrite(dout,sprintf('%s.png',savefilename),'Alpha',mask);
+end
+
+function A=fillgap(xx,yy,A,gap)
+% fill the data at the points where the data is not available
+sz = size(A);
+mask = zeros(sz,'int8');
+k = find(gap);
+k(k==1|k==numel(A)) = [];
+if ~isempty(k)
+    [ki,kj] = ind2sub(sz,k);
+    % sets to 1 every previous and next index, both in column and row order
+    mask(sub2ind(sz,max(1,ki-1),kj))=1;
+    mask(sub2ind(sz,min(sz(1),ki+1),kj))=1;
+    mask(sub2ind(sz,ki,max(1,kj-1)))=1;
+    mask(sub2ind(sz,ki,min(sz(2),kj+1)))=1;
+    % removes the novalue index
+    mask(k)=0;
+    % keeps only border values
+    kb=find(mask);
+    A(k)=griddata(xx(kb),yy(kb),double(A(kb)),xx(k),yy(k));
 end
 

@@ -1,19 +1,27 @@
 folder='Houston';
-beam='fbd';
+beam='fbs';
+nr=4720;
 isfbs=isequal(beam,'fbs');
 load(strcat(folder,'/dem.mat'));
 lake=islake(dem);
-ocean=bwareaopen(lake,2000);
+ocean=bwareaopen(lake,5000);
 
-X=readslcs(4720,folder,beam); %fbd
-slc=X(1).amp();
-[Y,cavg]=readcs2(folder);
-drate=-fitcurve(Y,[1,length(Y)]);
+X=readslcs(nr,folder,beam);
+ind=1;
+slc=X(ind).amp;
+[Y,cavg]=readcs2(nr/4,folder);
+drate=-fitcurve(Y,X(ind).id,folder,3);
+for i=1:length(Y)
+    if isequal(char(Y(i).data1),char(X(ind).id))
+        c1=Y(i).phase;
+        break;
+    end
+end
+c1=imresize(c1,size(slc));
 drate=imresize(drate,size(slc));
-c1=imresize(Y(1).phase,size(slc));
 [avg,mval]=slcmeanmax(X);
 
-% crop
+crop
 slc=slc(1:4600,:);
 c1=c1(1:4600,:);
 drate=drate(1:4600,:);
@@ -41,8 +49,8 @@ if isfbs
 else
     water=water & smean<60;
 end
-water=water & cmean<0.3;
-water=water & dmean<0.012;
+water=water & cmean<0.20;
+water=water & dmean<0.15;
 
 if isfbs
     island=ocean & mval>170;

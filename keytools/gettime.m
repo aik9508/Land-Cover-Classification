@@ -1,5 +1,5 @@
-function t = gettime(folder)
-filelist=dir(strcat(folder,'/*.c'));
+function t = gettime(data1,folder)
+filelist=dir(char(strcat(folder,'/',data1,'*.c')));
 nd=length(filelist);
 files1=string([1,nd]);
 files2=string([1,nd]);

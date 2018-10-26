@@ -1,5 +1,7 @@
 *.c
+*.mat
 *.slc
+*.dem
 /Houston*
 /LaMarque
 /kmls
