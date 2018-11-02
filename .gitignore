@@ -1,5 +1,8 @@
 *.c
 *.mat
+*.png
+*.jpg
+*.tif
 *.slc
 *.dem
 /Houston*
