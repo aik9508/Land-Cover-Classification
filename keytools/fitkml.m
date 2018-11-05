@@ -9,11 +9,7 @@ fid=fopen(strcat(folder,'/lon'));
 lon=fread(fid,[nr,inf],'float','ieee-le');
 fclose(fid);
 
-if ~isequal(size(x),size(lat))
-    [sx1,sx2]=size(x);
-    lat=lat(1:sx1,1:sx2);
-    lon=lon(1:sx1,1:sx2);
-end
+x=imresize(x,size(lat));
 
 % number of points in range and azimuth direction
 [nr,na]=size(lat);
@@ -40,7 +36,7 @@ count=max(1,count);
 m=m./count;
 
 %% interpolation
-cc=bwconncomp(m==0);
+cc=bwconncomp(count==0);
 gap=zeros(nresamplat,nresamplon);
 for i = 1:length(cc.PixelIdxList)
     if length(m(cc.PixelIdxList{i}))<=20
@@ -66,7 +62,8 @@ end
 mask=zeros(nresamplat,nresamplon);
 m(isinf(m))=0;
 m(isnan(m))=0;
-mask(m>0)=1;
+mask(m~=0)=1;
+mask(gap>0)=1;
 minm = min(m(:));
 maxm = max(m(:));
     
@@ -112,7 +109,6 @@ else
     % Scale to Color Map
     if nargin>8
         cmap=cb;
-        maxm=0.198;
     else
         cmap=jet();
     end

@@ -5,6 +5,7 @@
 *.tif
 *.slc
 *.dem
+*.kml
 /Houston*
 /LaMarque
 /kmls

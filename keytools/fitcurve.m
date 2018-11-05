@@ -49,6 +49,7 @@ while i<=count && uniquecount<ndata
 		i=i+1;
 	end
 end
+y=y(:,1:ndata);
 if uniquecount == ndata
 	x=log(uniquet(1:ndata)/30);
     y=log(y);

@@ -21,7 +21,7 @@ while ~feof(fid)
     words=split(tline);
     if (contains(words(1),files1(k)) && contains(words(2),files2(k))) || ...
        (contains(words(1),files2(k)) && contains(words(2),files1(k)))
-        fprintf('file1: %s, file2: %s\n',files1(k),files2(k));
+%         fprintf('file1: %s, file2: %s\n',files1(k),files2(k));
         t(k)=str2double(words(3));
         k=k+1;
     end
