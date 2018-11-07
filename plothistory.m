@@ -1,6 +1,6 @@
-function plothistory(x,y,t,X,index,k,b,color,displayname)
+function plothistory(x,y,t,X,index,color,k,b,displayname)
 ch=zeros(1,length(index));
-ws=2;
+ws=3;
 for i=1:length(index)
     ch(i)=mean(mean(X(index(i)).phase(x-ws:x+ws,y-ws:y+ws)));
 end
@@ -11,12 +11,12 @@ if nargin<=8
 else
     plot(t,ch,strcat(color,'o'),'Displayname',displayname,'Linewidth',2);
 end
-if nargin>5
+if nargin>6
     hold on
     
 %     plot(uniquet,k(x,y)*uniquet+b(x,y),'Linewidth',2);
-%     plot(uniquet,0.1+exp(k(x,y)*uniquet+b(x,y)),'Linewidth',2);
-    plot(tsample,exp(b(x,y))*tsample.^k(x,y),color,'Linewidth',2);
+%     plot(tsample,min(ch)*0.8+exp(k(x,y)*tsample+b(x,y)),color,'Linewidth',2);
+    plot(tsample,exp(b(x,y))*tsample.^k(x,y)+min(ch)*0,color,'Linewidth',2);
     hold off
 end
 xlabel('Time/month','Fontsize',15);

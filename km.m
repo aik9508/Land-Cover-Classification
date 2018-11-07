@@ -2,7 +2,7 @@ function [lbs,centers,mindis] = km(x,k,maxiters,centers)
 
 npts=size(x,1);
 if nargin<3 || isempty(maxiters)
-    maxiters=50;
+    maxiters=100;
 end
 
 if nargin<4

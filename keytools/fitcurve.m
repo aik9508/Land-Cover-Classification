@@ -24,7 +24,7 @@ index=index(1:count);
 
 [m,n]=size(X(1).phase);
 y=zeros(m*n,ndata);
-windowsize=5;
+windowsize=3;
 kernel=ones(windowsize)/(windowsize^2);
 
 % get the time baseline of all InSAR data

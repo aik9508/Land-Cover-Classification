@@ -1,6 +1,7 @@
 folder='LaMarque';
 X1=readslcs(4720,folder,'fbs');
-X2=readslcs(4720,folder,'fbd');
+Y=readcs2(1180,folder);
+% X2=readslcs(4720,folder,'fbd');
 corr=Y(1).phase;
 for i=2:length(Y)
     corr=corr+Y(i).phase;
@@ -13,13 +14,13 @@ end
 drate=zeros(size(corr));
 count=0;
 for i=1:length(X1)
-    t=gettime(X(i).id,folder);
+    t=gettime(X1(i).id,folder);
     if numel(t)>5
         count=count+1;
-        k=fitcurve(Y,X(i).id,'LaMarque',7);
+        k=fitcurve(Y,X1(i).id,'LaMarque',7);
         drate=drate+k;
     end
 end
 drate = -drate/count;
 drate = imresize(drate,size(amp));
-corr = imresize(xoee,size(amp));
+corr = imresize(corr,size(amp));

@@ -6,9 +6,11 @@ npts=numel(varargin{1});
 data=zeros(dim,npts);
 fprintf('flatten data...\n');
 sigmas=zeros(1,dim);
+% sigmas=max(centers,[],1)-min(centers,[],1);
 for i=1:dim
     sigmas(i)=sqrt(var(varargin{i}(:)));
     data(i,:)=varargin{i}(:)/sigmas(i);
+    fprintf('Normalize paramter %d by its standard deviation %6.3f\n',i,sigmas(i));
 end
 distance=zeros(nlbs,npts);
 for i=1:nlbs

@@ -49,7 +49,7 @@ fid=fopen(strcat(folder,'/lon'));
 lon=fread(fid,[nr,inf],'float','ieee-le');
 fclose(fid);
 if ~isempty(cutedgeindex)
-    if numel(offsets==2)
+    if numel(offsets)==2
         lat=lat(offsets(1)+1:end-offsets(2),:);
         lon=lon(offsets(1)+1:end-offsets(2),:);
         x=x(offsets(1)+1:end-offsets(2),:);
@@ -81,6 +81,11 @@ end
 if ~isempty(lonindex)
     lons(1)=max(lonmin,lons(1));
     lons(2)=min(lonmax,lons(2));
+end
+if ~isempty(latindex) || ~isempty(lonindex)
+    fprintf('Lat/lon information for the cropped area:\n');
+    fprintf('lat_min=%7.4f,lat_max=%7.4f\n',lats(1),lats(2));
+    fprintf('lon_min=%7.4f,lon_max=%7.4f\n',lons(1),lons(2));
 end
 
 dlat=lat(1,2)-lat(1,1);
