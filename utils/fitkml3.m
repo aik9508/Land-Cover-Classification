@@ -211,6 +211,11 @@ if ~isempty(saveindex)
     end
 end
 
+re=6370000;
+lon_spacing=re*sin((90-abs(latmax+latmin)/2)/180*pi)*(lonmax-lonmin)/180*pi/nresamplon;
+lat_spacing=re*(latmax-latmin)/180*pi/nresamplat;
+fprintf('lon pixel spacing:%f m, lat pixel spaceing:%f m\n',lon_spacing,lat_spacing);
+
 function A=fillgap(xx,yy,A,gap)
 % fill the data at the points where the data is not available
 sz = size(A);

@@ -7,4 +7,3 @@ end
 % kernel=ones(ws)/ws^2;
 % m=conv2(m,kernel,'same');
 m = imgaussfilt(m,0.5);
-m(end,end)=0.198;

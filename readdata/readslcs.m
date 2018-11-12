@@ -1,4 +1,4 @@
-function X=readslcs(nr,folder,beam,varargin)
+function X=readslcs(folder,nr,beam,varargin)
 filelist=dir(strcat([folder,'/slc',beam,'/*.slc']));
 tocrop=false;
 if any(strcmpi(varargin,'crop'))

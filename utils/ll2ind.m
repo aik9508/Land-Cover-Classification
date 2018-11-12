@@ -1,11 +1,11 @@
-function [subr,subc,ind]=ll2ind(lats,lons,Nrange,varargin)
+function [subr,subc,ind]=ll2ind(folder,nr,lats,lons,varargin)
 % ind = ll2ind(lats,lons,Nrange) computes the relative
 % position of a target region in a large region. 
 % lats contains the range of the latitude of the target region
 % lons contains the range of the longitude of the target region
 % Nrange is the number of range samples for the entire large region.
-fid=fopen('lat');
-lat=fread(fid,[Nrange,inf],'float','ieee-le');
+fid=fopen(strcat(folder,'/lat'));
+lat=fread(fid,[nr,inf],'float','ieee-le');
 if ~isempty(varargin)
     looks=varargin{1};
 else
@@ -19,8 +19,8 @@ end
 fclose(fid);
 latind=and(lat>=lats(1),lat<=lats(2));
 
-fid=fopen('lon');
-lon=fread(fid,[Nrange,inf],'float','ieee-le');
+fid=fopen(strcat(folder,'/lon'));
+lon=fread(fid,[nr,inf],'float','ieee-le');
 if looks>1
     lon=lon(1:looks:end,1:looks:end);
     lon=(lon(1:end-1,1:end-1)+lon(2:end,1:end-1)+...

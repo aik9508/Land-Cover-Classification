@@ -1,7 +1,7 @@
 folder='LaMarque';
-X1=readslcs(4720,folder,'fbs');
-Y=readcs2(1180,folder);
-% X2=readslcs(4720,folder,'fbd');
+X1=readslcs(folder,4720,'fbs');
+Y=readcs(folder,4720,4);
+% X2=readslcs(folder,4720,'fbd');
 corr=Y(1).phase;
 for i=2:length(Y)
     corr=corr+Y(i).phase;

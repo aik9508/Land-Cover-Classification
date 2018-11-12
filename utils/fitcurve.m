@@ -61,8 +61,9 @@ if uniquecount == ndata
     b=(A*D-C*B)/(A*ndata-B^2);
 	k=reshape(k,[m,n]);
     b=reshape(b,[m,n]);
+    k(isnan(k))=0;
 	k=min(0,k);
 else
 	k=[];
-    b=[];
+  b=[];
 end

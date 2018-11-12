@@ -1,4 +1,4 @@
-function [c,min_distance]=classification(centers,varargin)
+function [c,min_distance]=supcl(centers,varargin)
 [nlbs,dim]=size(centers);
 fprintf('Land classification, number of categories: %d\n',nlbs);
 fprintf('Dimension of data: %d\n',dim);
@@ -25,3 +25,4 @@ for i=1:nlbs
     k=min_distance==distance(i,:);
     c(k)=i;
 end
+min_distance=reshape(min_distance,size(c));
