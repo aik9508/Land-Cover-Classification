@@ -1,11 +1,11 @@
-function [k,b,index,uniquet,Z,x,y]=fitcurve2(folder,nr,looks,ndata,windowsize,removal)
+function [k,b,index,uniquet,Z,x,y]=fitcurve2(Y,folder,nr,looks,ndata,windowsize,removal)
 t=gettime('_',folder)/12;
 [ts,perm]=sort(t);
 uniquet=unique(t);
 nc=length(uniquet);
 ny=length(t);
 ind=1;
-Y=readcs(folder,nr,looks);
+%Y=readcs(folder,nr,looks);
 Z=repmat(struct('phase',[]),[1,nc]);
 for i=1:length(uniquet)
     count=0;
@@ -20,6 +20,8 @@ end
 
 kernel=ones(windowsize)/(windowsize^2);
 [m,n]=size(Z(1).phase);
+ndata=min(ndata,nc);
+removal(removal>ndata)=[];
 y=zeros(m*n,ndata);
 for i=1:ndata
     y(:,i)=reshape(conv2(Z(i).phase,kernel,'same'),[m*n,1]);
