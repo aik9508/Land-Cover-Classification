@@ -105,21 +105,50 @@ for i=1:nr
         m(indlat,indlon)=m(indlat,indlon)+x(i,j);
     end
 end
-count=max(1,count);
-m=m./count;
+%count=max(1,count);
+m=m./max(1,count);
 
 %% interpolation
-cc=bwconncomp(m==0);
-gap=zeros(nresamplat,nresamplon);
-for i = 1:length(cc.PixelIdxList)
-    if length(m(cc.PixelIdxList{i}))<=100
-        gap(cc.PixelIdxList{i})=1;
-    end
-end
-[xx,yy]=meshgrid([1:nresamplat,1:nresamplon]);
-m=fillgap(xx,yy,m,gap);
+cc=bwconncomp(count==0);
 if ~isempty(markindex)
+	sz=size(m);
+	npts=sz(1)*sz(2);
+	for i = 1:cc.NumObjects
+		if length(cc.PixelIdxList{i})<=100
+			idx=cc.PixelIdxList{i}(1);
+			%if length(cc.PixelIdxList)==1
+			%	idx=cc.PixelIdxList{i};
+			%	neighbourmask=[idx+1,idx-1,idx-nresamplon,idx+nresamplon];
+			%	neighbourmask=max(1,min(neighbourmask,npts));
+			%else	
+			%	[ki,kj] = ind2sub(sz,cc.PixelIdxList{i});
+			%	neighbourmask=[];
+			%	neighbourmask(sub2ind(sz,max(1,ki-1),kj))=1;
+			%	neighbourmask(sub2ind(sz,min(sz(1),ki+1),kj))=1;
+			%	neighbourmask(sub2ind(sz,ki,max(1,kj-1)))=1;
+			%	neighbourmask(sub2ind(sz,ki,min(sz(2),kj+1)))=1;
+			%	neighbourmarks=round(m(find(neighbourmask>0)));
+			%end
+			%fprintf('Size of the hole:%d ',length(cc.PixelIdxList{i}));
+			%fprintf('Size of it neighbour:%d ',length(neighbourmarks));
+			%mmark=majoritymark(neighbourmarks,length(marks));	
+			%fprintf('majority mark: %d \n', mmark);
+			m(cc.PixelIdxList{i})=m(idx-1);
+			if mod(i,100000)==0
+				fprintf('Filling the %d th holes, total number of holes: %d\n',i,cc.NumObjects);
+			end
+		end
+	end
     m=round(m);
+else
+	gap=zeros(nresamplat,nresamplon);
+	for i = 1:length(cc.PixelIdxList)
+		if length(cc.PixelIdxList{i})<=100
+			gap(cc.PixelIdxList{i})=1;
+		end
+	end
+	[xx,yy]=meshgrid([1:nresamplat,1:nresamplon]);
+	m=fillgap(xx,yy,m,gap);
 end
 
 %% trucate the image if necessary
@@ -150,7 +179,6 @@ if ~isempty(saveindex)
     m(isinf(m))=0;
     m(isnan(m))=0;
     mask(m~=0)=1;
-    mask(gap>0)=1;
     if isempty(rangeindex)
         minm = min(m(:));
         maxm = max(m(:));
@@ -234,5 +262,16 @@ if ~isempty(k)
     % keeps only border values
     kb=find(mask);
     A(k)=griddata(xx(kb),yy(kb),double(A(kb)),xx(k),yy(k));
+end
+
+function mark=majoritymark(marks,markmax)
+mark=1;
+maxcount=sum(marks==mark);
+for i=2:markmax
+	count=sum(marks==i);
+	if count>maxcount
+		maxcount=count;
+		mark=i;
+	end
 end
 

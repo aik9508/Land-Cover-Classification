@@ -4,7 +4,7 @@ colormarks={'blue','brown','violet','yellow','cyan','lightgreen','orange','darkg
 lbs=sortlbs(lbs,centers);
 savefilename=sprintf('%s/avgunsupcl%d',char(savefolder),kmax);
 fitkml3(lbs,4720,folder,'savefilename',savefilename ...
-                                ,'marks',colormarks{1:k},'cutedge',[150,150,100,100]);
+                                ,'marks',colormarks(1:kmax),'cutedge',[150,150,100,100]);
 
 function [newlbs]=sortlbs(lbs,centers)
 [~,P]=sort(centers(:,1));

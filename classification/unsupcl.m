@@ -10,6 +10,8 @@ for i=1:dim
     sigmas(i)=sqrt(var(varargin{i}(:)));
     data(i,:)=varargin{i}(:)/sigmas(i);
 end
+% to delete
+data(1,:)=data(1,:)*1.2;
 data=data';
 [lbs,centers,mindis]=km(data,k);
 lbs=reshape(lbs,size(varargin{1}));

@@ -1,4 +1,4 @@
-function [amp,corr,drate,lbs]=avgunsupcl(nr,looks,folder,savefolder,kmax)
+function [amp,corr,drate,lbs]=avgunsupcl(folder,nr,looks,savefolder,kmax)
 X1=readslcs(folder,nr,'fbs');
 X2=readslcs(folder,nr,'fbd');
 Y=readcs(folder,nr,looks);
@@ -19,27 +19,29 @@ sz=size(amp);
 for i=2:length(X1)
     amp=amp+X1(i).amp(1:sz(1),1:sz(2));
 end
-drate=zeros(size(corr));
-count=0;
-for i=1:length(X1)
-    t=gettime(X1(i).id,folder);
-    if numel(t)>5
-        count=count+1;
-        k=fitcurve(Y,X1(i).id,folder,7);
-        drate=drate+k;
-    end
-end
-for i=1:length(X2)
-    t=gettime(X2(i).id,folder);
-    if numel(t)>5
-        count=count+1;
-        k=fitcurve(Y,X2(i).id,folder,7);
-        drate=drate+k;
-    end
-end
-drate = -drate/count;
-drate = resizem(drate,size(amp),'bilinear');
-corr = resizem(corr,size(amp),'bilinear');
+k = fitcurve2(Y,folder,nr,looks,20,1,[3,5]);
+drate = imresize(-k,size(amp));
+%drate=zeros(size(corr));
+%count=0;
+%for i=1:length(X1)
+%    t=gettime(X1(i).id,folder);
+%    if numel(t)>5
+%        count=count+1;
+%        k=fitcurve(Y,X1(i).id,folder,7);
+%        drate=drate+k;
+%    end
+%end
+%for i=1:length(X2)
+%    t=gettime(X2(i).id,folder);
+%    if numel(t)>5
+%        count=count+1;
+%        k=fitcurve(Y,X2(i).id,folder,7);
+%        drate=drate+k;
+%    end
+%end
+%drate = -drate/count;
+%drate = imresize(drate,size(amp));
+corr = imresize(corr,size(amp));
 [lbs,centers]=unsupcl(kmax,amp,corr,drate);
 lbs=sortlbs(lbs,centers);
 savefilename=sprintf('%s/avgunsupcl%d',char(savefolder),kmax);

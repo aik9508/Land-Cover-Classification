@@ -13,15 +13,13 @@ elseif isequal(folder,'Houston')
 	colormarks={'blue','brown','brown','lightgreen','lightgreen','red','darkgreen'};
 end
 corr=Y(1).phase;
-sz=size(corr);
 fprintf('computing mean correlation..\n');
 for i=2:length(Y)
-	if isequal(size(Y(i).phase),sz)
-    	corr=corr+Y(i).phase;
-	end
+	corr=corr+Y(i).phase;
 end
 fprintf('computing mean amplitude..\n');
 amp=X1(1).amp;
+sz=size(amp);
 for i=2:length(X1)
     amp=amp+X1(i).amp(1:sz(1),1:sz(2));
 end
