@@ -28,7 +28,7 @@ for i=1:ndata
 end
 y(:,removal)=[];
 uniquet(removal)=[];
-ndata=nc-length(removal);
+ndata=ndata-length(removal);
 x=log(uniquet(1:ndata)/30);
 y=log(y+0.5);
 A=sum(x.^2);
@@ -40,5 +40,6 @@ b=(A*D-C*B)/(A*ndata-B^2);
 k=reshape(k,[m,n]);
 b=reshape(b,[m,n]);
 k(isnan(k))=0;
-index=1:nc-length(removal);
+index=1:nc;
+index(removal)=[];
 x=uniquet(1:ndata)/30;
