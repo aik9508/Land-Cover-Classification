@@ -7,4 +7,4 @@ ymin = max(1,y-hw);
 ymax = min(s2,y+hw);
 locm = m(xmin:xmax,ymin:ymax);
 figure2(1),histogram(locm);
-figure2(2),imagesc(locm,[0,600]),colormap('gray');
+figure2(2),imagesc(locm,[0,12]),colormap('gray');

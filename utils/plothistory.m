@@ -15,8 +15,8 @@ if nargin>6
     hold on
     
 %     plot(uniquet,k(x,y)*uniquet+b(x,y),'Linewidth',2);
-%     plot(tsample,exp(k(x,y)*tsample+b(x,y)),color,'Linewidth',2);
-    plot(tsample,exp(b(x,y))*tsample.^k(x,y)+min(ch)*0,color,'Linewidth',2);
+%     plot(tsample,exp(k(x,y)*tsample+b(x,y))-0.5,color,'Linewidth',2);
+    plot(tsample,exp(b(x,y))*tsample.^k(x,y)+min(ch)*0-0.5,color,'Linewidth',2);
     hold off
 end
 xlabel('Time/month','Fontsize',15);

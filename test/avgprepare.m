@@ -18,3 +18,4 @@ amp = amp/length(X);
 k = fitcurve2(Y,folder,nr,looks,23,1,[3,5,21,22,23]);
 drate = imresize(-k,size(amp));
 corr = imresize(corr,size(amp));
+

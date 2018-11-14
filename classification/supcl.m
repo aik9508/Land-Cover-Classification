@@ -12,6 +12,7 @@ for i=1:dim
     data(i,:)=varargin{i}(:)/sigmas(i);
     fprintf('Normalize paramter %d by its standard deviation %6.3f\n',i,sigmas(i));
 end
+%data(1,:)=data(1,:)*1.5;
 distance=zeros(nlbs,npts);
 for i=1:nlbs
     fprintf('Processing, iteration %d, total %d\n',i,nlbs);
