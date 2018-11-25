@@ -20,7 +20,7 @@ for i=1:maxiters
     for j=1:k
         ind=mindis==dis(:,j);
         if sum(ind)==0
-            centers(j,:)=x(ceil(rand(k,1)*npts),:);
+            centers(j,:)=x(ceil(rand()*npts),:);
         else
             lbs(ind)=j;
             centers(j,:)=mean(x(ind,:),1);

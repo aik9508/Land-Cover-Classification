@@ -1,6 +1,9 @@
 function [lbs,centers,mindis]=postcl(folder,savefolder,centers,kmax,amp,corr,drate)
 colormarks={'blue','brown','violet','yellow','cyan','lightgreen','orange','darkgreen','red','beige'};
-[lbs,centers,mindis]=unsupcl(kmax,centers,amp,corr,drate);
+sigma_corr = sqrt(var(corr(:)));
+sigma_drate = sqrt(var(drate(:)));
+scales = [102,sigma_corr,sigma_drate];
+[lbs,centers,mindis]=unsupcl(kmax,centers,scales,amp,corr,drate);
 lbs=sortlbs(lbs,centers);
 savefilename=sprintf('%s/avgunsupcl%d',char(savefolder),kmax);
 fitkml3(lbs,4720,folder,'savefilename',savefilename ...
