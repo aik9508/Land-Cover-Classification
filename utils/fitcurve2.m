@@ -1,4 +1,4 @@
-function [k,b,index,uniquet,Z,x,y]=fitcurve2(Y,folder,nr,looks,ndata,windowsize,removal)
+function [k,b,index,uniquet,Z,x,y]=fitcurve2(Y,folder,ndata,windowsize,removal)
 t=gettime('_',folder)/12;
 [ts,perm]=sort(t);
 uniquet=unique(t);

@@ -1,6 +1,6 @@
-function lbs=postcl(folder,savefolder,kmax,amp,corr,drate)
+function [lbs,centers,mindis]=postcl(folder,savefolder,centers,kmax,amp,corr,drate)
 colormarks={'blue','brown','violet','yellow','cyan','lightgreen','orange','darkgreen','red','beige'};
-[lbs,centers]=unsupcl(kmax,amp,corr,drate);
+[lbs,centers,mindis]=unsupcl(kmax,centers,amp,corr,drate);
 lbs=sortlbs(lbs,centers);
 savefilename=sprintf('%s/avgunsupcl%d',char(savefolder),kmax);
 fitkml3(lbs,4720,folder,'savefilename',savefilename ...

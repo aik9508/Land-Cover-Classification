@@ -1,6 +1,6 @@
 function [amp,corr,drate,lbs]=avgunsupcl(folder,nr,looks,savefolder,kmax)
 X1=readslcs(folder,nr,'fbs');
-X2=readslcs(folder,nr,'fbd');
+% X2=readslcs(folder,nr,'fbd');
 Y=readcs(folder,nr,looks);
 %if isequal(folder,'Houston3')
 %	colormarks={'blue','brown','brown','lightgreen','red','darkgreen','darkgreen'};

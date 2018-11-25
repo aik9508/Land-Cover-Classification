@@ -1,4 +1,4 @@
-function [newamp,meanwateramp] = correctamp(amp,water)
+function [newamp,meanwateramp,fitk] = fitmeanamp(amp,water)
 wateramp=amp;
 wateramp(not(water))=0;
 [m,~]=size(amp);
@@ -11,8 +11,10 @@ end
 x = 2000:4500;
 y = meanwateramp(x);
 fitk = polyfit(x,y,1);
-% hold on
-% plot(x,fitk(1)*x+fitk(2));
+plot(meanwateramp,'.');
+hold on
+plot(x,fitk(1)*x+fitk(2));
+hold off
 newamp=amp;
 amp0=fitk(1)*2000+fitk(2);
 for i=2000:m

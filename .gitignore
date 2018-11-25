@@ -7,12 +7,13 @@
 *.slc
 *.dem
 *.kml
+/Meeting1114
 /Houston*
 /LaMarque
 /kmls
 /westHouston
 /northHouston
-/cv
+/cv*
 /imags
 /tifs
 /tools
