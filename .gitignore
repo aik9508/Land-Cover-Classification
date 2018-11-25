@@ -1,4 +1,5 @@
 *.c
+*.m~
 *.mat
 *.png
 *.jpg
@@ -6,6 +7,7 @@
 *.slc
 *.dem
 *.kml
+/Meeting1114
 /Houston*
 /LaMarque
 /kmls

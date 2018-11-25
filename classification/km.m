@@ -28,7 +28,7 @@ for i=1:maxiters
     end
     cost=sum(mindis);
     fprintf('iteration %d, cost %5.4E\n',i,cost);
-    if cost==oldcost
+    if abs(cost-oldcost)/oldcost<5e-5
         break;
     else
         oldcost=cost;
