@@ -18,7 +18,7 @@ for i=1:maxiters
     end
     mindis=min(dis,[],2);
     for j=1:k
-        ind=mindis==dis(:,j);
+        ind = mindis==dis(:,j); 
         if sum(ind)==0
             centers(j,:)=x(ceil(rand()*npts),:);
         else

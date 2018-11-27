@@ -23,12 +23,19 @@ sz=size(amp);
 for i=2:length(X1)
     amp=amp+X1(i).amp(1:sz(1),1:sz(2));
 end
-k = fitcurve2(Y,folder,nr,looks,23,1,[3,5,21,22,23]);
+amp = amp/X1.length;
+fitk = load('fitk.mat');
+fitk = fitk.fitk;
+amp = correctmap(amp,fitk);
+corr = corr/Y.length;
+k = fitcurve3(Y,folder,23,1,[21,22,23]);
 drate = imresize(-k,size(amp));
 corr = imresize(corr,size(amp));
 coords = load(strcat(folder,'/coords.mat'));
 coords = coords.coords;
 centers = computecenters(coords,amp,corr,drate);
-c=supcl(centers,amp,corr,drate);
+sigma_corr=sqrt(var(corr(:)));
+sigma_drate=sqrt(var(drate(:)));
+c=supcl(centers,[102,sigma_corr,sigma_drate],amp,corr,drate);
 fitkml3(c,4720,folder,'savefilename',strcat(char(savefolder),'/avgsupcl') ...
                                 ,'marks',colormarks,'cutedge',[150,150,100,100]);
