@@ -1,6 +1,6 @@
 function plothistory(x,y,t,X,index,color,k,b,displayname)
 ch=zeros(1,length(index));
-ws=1;
+ws=0;
 for i=1:length(index)
     ch(i)=mean(mean(X(index(i)).phase(x-ws:x+ws,y-ws:y+ws)));
 end

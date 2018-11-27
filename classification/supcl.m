@@ -28,4 +28,4 @@ for i=1:nlbs
     k=min_distance==distance(i,:);
     c(k)=i;
 end
-min_distance=reshape(min_distance,size(c));
+min_distance=reshape(sqrt(min_distance),size(c));
