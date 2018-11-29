@@ -105,41 +105,25 @@ for i=1:nr
         m(indlat,indlon)=m(indlat,indlon)+x(i,j);
     end
 end
-%count=max(1,count);
 m=m./max(1,count);
 
 %% interpolation
-cc=bwconncomp(count==0);
+nodata=count==0;
+cc=bwconncomp(nodata);
 if ~isempty(markindex)
-	sz=size(m);
-	npts=sz(1)*sz(2);
-	for i = 1:cc.NumObjects
-		if length(cc.PixelIdxList{i})<=100
-			idx=cc.PixelIdxList{i}(1);
-			%if length(cc.PixelIdxList)==1
-			%	idx=cc.PixelIdxList{i};
-			%	neighbourmask=[idx+1,idx-1,idx-nresamplon,idx+nresamplon];
-			%	neighbourmask=max(1,min(neighbourmask,npts));
-			%else	
-			%	[ki,kj] = ind2sub(sz,cc.PixelIdxList{i});
-			%	neighbourmask=[];
-			%	neighbourmask(sub2ind(sz,max(1,ki-1),kj))=1;
-			%	neighbourmask(sub2ind(sz,min(sz(1),ki+1),kj))=1;
-			%	neighbourmask(sub2ind(sz,ki,max(1,kj-1)))=1;
-			%	neighbourmask(sub2ind(sz,ki,min(sz(2),kj+1)))=1;
-			%	neighbourmarks=round(m(find(neighbourmask>0)));
-			%end
-			%fprintf('Size of the hole:%d ',length(cc.PixelIdxList{i}));
-			%fprintf('Size of it neighbour:%d ',length(neighbourmarks));
-			%mmark=majoritymark(neighbourmarks,length(marks));	
-			%fprintf('majority mark: %d \n', mmark);
-			m(cc.PixelIdxList{i})=m(idx-1);
-			if mod(i,100000)==0
-				fprintf('Filling the %d th holes, total number of holes: %d\n',i,cc.NumObjects);
-			end
-		end
-	end
+    % if we generate classification maps, no interpolation will be used
+    % Instead, the label with maximum proportion in the neighbour of the
+    % hole will be assigned to it.
     m=round(m);
+    fprintf('Computing most likely label...\n');
+    mjneighbour = majorneighbour(m,length(marks),5);
+    fprintf('Filling holes...\n');
+    m(nodata) = mjneighbour(nodata);
+	for i = 1:cc.NumObjects
+		if length(cc.PixelIdxList{i})>=100
+            m(cc.PixelIdxList{i}) = 0;
+        end
+    end
 else
 	gap=zeros(nresamplat,nresamplon);
 	for i = 1:length(cc.PixelIdxList)
@@ -212,6 +196,24 @@ if ~isempty(saveindex)
                     color=[114,58,147]/255;
                 case 'yellow'
                     color=[255,255,0]/255;
+                case 'r'
+                    color=[228,26,28]/255;
+                case 'b'
+                    color=[55,126,184]/255;
+                case 'g'
+                    color=[77,175,74]/255;
+                case 'v'
+                    color=[152,78,163]/255;
+                case 'o'
+                    color=[255,127,0]/255;
+                case 'y'
+                    color=[255,255,51]/255;
+                case 'm'
+                    color=[166,86,40]/255;
+                case 'p'
+                    color=[247,129,191]/255;
+                case 'gray'
+                    color = [153,153,153]/255;
                 otherwise
                     color=[255,255,255]/255;
             end
@@ -264,14 +266,12 @@ if ~isempty(k)
     A(k)=griddata(xx(kb),yy(kb),double(A(kb)),xx(k),yy(k));
 end
 
-function mark=majoritymark(marks,markmax)
-mark=1;
-maxcount=sum(marks==mark);
-for i=2:markmax
-	count=sum(marks==i);
-	if count>maxcount
-		maxcount=count;
-		mark=i;
-	end
+function mjneighbour=majorneighbour(m,nlbs,windowsize)
+mask = zeros(size(m));
+mjneighbour = zeros(size(m));
+kernel = ones(windowsize)/windowsize^2;
+for i=1:nlbs
+    lbdensity=conv2(single(m==i),kernel,'same');
+    mask=max(mask,lbdensity);
+    mjneighbour(mask==lbdensity)=i;
 end
-
