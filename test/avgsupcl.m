@@ -5,12 +5,12 @@ if nargin<5
 	fprintf('reading correlation files...\n');
 	Y=readcs(folder,nr,looks);
 end
-if isequal(folder,'Houston3')
-	colormarks={'blue','brown','brown','lightgreen','red','darkgreen','darkgreen'};
-elseif isequal(folder,'LaMarque')
-	colormarks={'blue','brown','brown','lightgreen','red','darkgreen','brown','brown'};
-elseif isequal(folder,'Houston')
-	colormarks={'blue','brown','brown','lightgreen','lightgreen','red','darkgreen'};
+%if isequal(folder,'Houston3')
+%	colormarks={'blue','brown','brown','lightgreen','red','darkgreen','darkgreen'};
+%elseif isequal(folder,'LaMarque')
+	colormarks={'blue','brown','brown','lightgreen','red','darkgreen','brown','brown','violet'};
+%elseif isequal(folder,'Houston')
+%	colormarks={'blue','brown','brown','lightgreen','lightgreen','red','darkgreen'};
 end
 corr=Y(1).phase;
 fprintf('computing mean correlation..\n');
@@ -34,8 +34,10 @@ corr = imresize(corr,size(amp));
 coords = load(strcat(folder,'/coords.mat'));
 coords = coords.coords;
 centers = computecenters(coords,amp,corr,drate);
-sigma_corr=sqrt(var(corr(:)));
-sigma_drate=sqrt(var(drate(:)));
-c=supcl(centers,[102,sigma_corr,sigma_drate],amp,corr,drate);
+%sigma_corr=sqrt(var(corr(:)));
+%sigma_drate=sqrt(var(drate(:)));
+scales = load('scales.mat');
+scales = scales.scales;
+c=supcl(centers,scales,amp,corr,drate);
 fitkml3(c,4720,folder,'savefilename',strcat(char(savefolder),'/avgsupcl') ...
                                 ,'marks',colormarks,'cutedge',[150,150,100,100]);
