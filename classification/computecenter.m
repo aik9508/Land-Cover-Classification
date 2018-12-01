@@ -1,4 +1,4 @@
-function center=computecenter(coords,plotflag,varargin)
+function [center,centervar]=computecenter(coords,plotflag,varargin)
 xmin=coords(1:4:end);
 xmax=coords(3:4:end);
 ymin=coords(2:4:end);
@@ -17,12 +17,14 @@ for k=1:length(xmin)
     if plotflag
         for i=1:length(varargin)
             crop=reshape(varargin{i}(index),[xmax(k)-xmin(k)+1,ymax(k)-ymin(k)+1]);
-            figure2,imagesc(rot90(crop)),colormap('jet'),colorbar;
+            figure,imagesc(rot90(crop)),colormap('jet'),colorbar;
         end
     end
 end
 center=zeros(1,length(varargin));
+centervar=zeros(1,length(varargin));
 for i=1:length(varargin)
     center(i)=mean(varargin{i}(indices));
+	centervar(i)=var(varargin{i}(indices));
 end
 
