@@ -17,7 +17,8 @@ for k=1:length(xmin)
     if plotflag
         for i=1:length(varargin)
             crop=reshape(varargin{i}(index),[xmax(k)-xmin(k)+1,ymax(k)-ymin(k)+1]);
-            figure2,imagesc(rot90(crop)),colormap('jet'),colorbar;
+            figure,imagesc(rot90(crop)),colormap('jet'),colorbar;
+            figure,histogram(crop);
         end
     end
 end
@@ -25,4 +26,3 @@ center=zeros(1,length(varargin));
 for i=1:length(varargin)
     center(i)=mean(varargin{i}(indices));
 end
-
