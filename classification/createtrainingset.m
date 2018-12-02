@@ -1,4 +1,4 @@
-function center=computecenter(coords,plotflag,varargin)
+function trainingset=createtrainingset(coords,plotflag,varargin)
 xmin=coords(1:4:end);
 xmax=coords(3:4:end);
 ymin=coords(2:4:end);
@@ -22,7 +22,7 @@ for k=1:length(xmin)
         end
     end
 end
-center=zeros(1,length(varargin));
+trainingset=zeros(numel(indices),length(varargin));
 for i=1:length(varargin)
-    center(i)=mean(varargin{i}(indices));
+    trainingset(:,i)=transpose(varargin{i}(indices));
 end

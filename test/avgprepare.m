@@ -21,6 +21,7 @@ fitk = fitk.fitk;
 amp = correctamp(amp,fitk);
 corr = corr/length(Y);
 k = fitcurve3(Y,folder,23,1,[3,5,21,22,23]);
+% drate = -k;
 drate = imresize(-k,size(amp));
 corr = imresize(corr,size(amp));
 
