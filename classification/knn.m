@@ -5,10 +5,15 @@ dim=length(varargin);
 fprintf('Dimension of data:%d\n',dim);
 fprintf('Creating training sets...\n');
 mdl=fitcknn(trainingsets,labels,'NumNeighbors',k);
-fprintf('Flattening data, number of data:%d\n',numel(varargin{1}));
+npts=numel(varargin{1});
+fprintf('Flattening data, number of data:%d\n',npts);
 data=zeros(dim,npts);
 for i=1:dim
     data(i,:)=varargin{i}(:);
 end
-[label,score,cost]=predict(mdl,trainingset);
+data=data';
+scales=load('scales.mat');
+scales=scales.scales;
+data=data./scales;
+[label,score,cost]=predict(mdl,data);
 toc
