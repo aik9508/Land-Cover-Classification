@@ -75,5 +75,5 @@ k(isnan(k))=0;
 k=min(0,k);
 k=reshape(k,[m,n]);
 b=reshape(b,[m,n]);
-b=exp(b).*((uniquet(1)/30).^k-(uniquet(end)/30).^k);
+% b=exp(b).*((uniquet(1)/30).^k-(uniquet(end)/30).^k);
 b(isnan(b))=0;

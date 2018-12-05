@@ -16,9 +16,12 @@ for i=2:length(X)
 end
 amp = amp/length(X);
 % correct amplitude
-fitk = load('fitk.mat');
-fitk = fitk.fitk;
-amp = correctamp(amp,fitk);
+% fitk = load('fitk.mat');
+% fitk = fitk.fitk;
+% amp = correctamp(amp,fitk);
+antennagain = ampcompensation();
+amp = amp./transpose(antennagain);
+amp = min(amp,600);
 corr = corr/length(Y);
 k = fitcurve3(Y,folder,23,1,[3,5,21,22,23]);
 % drate = -k;

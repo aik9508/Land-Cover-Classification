@@ -1,3 +1,4 @@
+function antennagain = ampcompensation()
 w = 3.1;        % Attenna width
 wvl = 0.236057; % Wavelength
 r0 = 856117;    % Near range distance
@@ -13,9 +14,9 @@ nrlooks = round(nr/looks);
 r = r0 + (0:nrlooks)*looks*dr;
 theta = acos((r.^2+(ht+re)^2-re^2)./(2*(ht+re)*r));
 % theta0 = theta(round(nrlooks/2));
-theta0 = theta(2000);
-% theta0 = (theta(1)+theta(end))/2;
-amp_theo = sinc(w*sin(theta(1:end-1)-theta0)/wvl).*(theta(2:end)-theta(1:end-1));
-amp_theo = amp_theo / max(amp_theo);
-plot(1:nrlooks,amp_theo);
-axis([1,nrlooks,0,1]);
+% theta0 = theta(2000);
+theta0 = (theta(1)+theta(end))/2;
+antennagain = sinc(w*sin(theta(1:end-1)-theta0)/wvl).*(theta(2:end)-theta(1:end-1));
+antennagain = antennagain / max(antennagain);
+% plot(1:nrlooks,antennagain);
+% axis([1,nrlooks,0,1]);
