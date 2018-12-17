@@ -15,11 +15,11 @@ if nargin>6
     hold on
     
 %     plot(uniquet,k(x,y)*uniquet+b(x,y),'Linewidth',2);
-%     plot(tsample,exp(k(x,y)*tsample+b(x,y))-0.5,color,'Linewidth',2);
-    plot(tsample,exp(b(x,y))*tsample.^k(x,y)+min(ch)*0,color,'Linewidth',2);
+    plot(tsample,exp(k(x,y)*tsample+b(x,y)),color,'Linewidth',2);
+%     plot(tsample,exp(b(x,y))*tsample.^k(x,y)+min(ch)*0,color,'Linewidth',2);
     hold off
 end
-xlabel('Time/month','Fontsize',15);
+xlabel('Time/year','Fontsize',15);
 ylabel('Coherence','Fontsize',15);
 title('Coherence history','Fontsize',20);
 axis([0,max(t),0,1]);
