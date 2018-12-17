@@ -270,7 +270,7 @@ function mjneighbour=majorneighbour(m,nlbs,windowsize)
 mask = zeros(size(m));
 mjneighbour = zeros(size(m));
 kernel = ones(windowsize)/windowsize^2;
-for i=1:nlbs
+for i=0:nlbs
     lbdensity=conv2(single(m==i),kernel,'same');
     mask=max(mask,lbdensity);
     mjneighbour(mask==lbdensity)=i;

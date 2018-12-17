@@ -15,5 +15,7 @@ data=data';
 scales=load('scales.mat');
 scales=scales.scales;
 data=data./scales;
+fprintf('Predicting...\n');
 [label,score,cost]=predict(mdl,data);
+label=reshape(label,size(varargin{1}));
 toc
