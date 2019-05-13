@@ -153,7 +153,7 @@ end
 if indlatmin~=1 || indlatmax~=nresamplat ||...
    indlonmin~=1 || indlonmax~=nresamplon
     m=m(indlatmin:indlatmax,indlonmin:indlonmax);
-    gap=gap(indlatmin:indlatmax,indlonmin:indlonmax);
+%     gap=gap(indlatmin:indlatmax,indlonmin:indlonmax);
     [nresamplat,nresamplon]=size(m);
 end
 
@@ -270,7 +270,7 @@ function mjneighbour=majorneighbour(m,nlbs,windowsize)
 mask = zeros(size(m));
 mjneighbour = zeros(size(m));
 kernel = ones(windowsize)/windowsize^2;
-for i=0:nlbs
+for i=1:nlbs
     lbdensity=conv2(single(m==i),kernel,'same');
     mask=max(mask,lbdensity);
     mjneighbour(mask==lbdensity)=i;
