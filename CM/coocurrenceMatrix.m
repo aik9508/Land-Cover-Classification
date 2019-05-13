@@ -1,4 +1,4 @@
-function cm=cooccurenceMatrix(dx,dy,g,greylevel,windowsize)
+function cm=coocurrenceMatrix(dx,dy,g,greylevel,windowsize)
 [m,n] = size(g);
 cm = zeros(greylevel,greylevel,m,n,'int8');
 x_aug = -1*ones(m,abs(dx));
